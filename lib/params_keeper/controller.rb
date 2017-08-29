@@ -46,10 +46,10 @@ module ParamsKeeper::Controller
   def keep_params?(options, configs)
     controller = options[:controller].to_s
     if configs[:to]
-      target = controller.presence || controller_name
-      Array(configs[:to]).any? { |c| c.to_s == target }
+      target = [controller, controller_name, controller_path]
+      Array(configs[:to]).any? { |c| c.to_s.in?(target) }
     else
-      controller.blank? || controller == controller_name
+      controller.blank? || controller.in?([controller_name, controller_path])
     end
   end
 
