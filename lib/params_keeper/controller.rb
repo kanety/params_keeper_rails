@@ -1,4 +1,3 @@
-require 'active_support'
 require 'params_keeper/helper'
 
 module ParamsKeeper::Controller
