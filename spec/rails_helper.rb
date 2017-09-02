@@ -20,8 +20,7 @@ Rails.application.routes.draw do
     collection do
       get :test_url_for
       3.times do |i|
-        get "test_config_only#{i+1}"
-        get "test_config_except#{i+1}"
+        get "test_config_args#{i+1}"
       end
       2.times do |i|
         get "test_config_to#{i+1}"

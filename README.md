@@ -38,25 +38,23 @@ GET "/examples?key1=**&key2=**"
 # hash argument
 url_for(action: :show)  #=> '/examples/:id?key1=**&key2=**'
 
-# string argument
-url_for('/examples')  #=> '/examples?key1=**&key2=**'
-
-# active model argument
-url_for(@example)  #=> '/examples/:id?key1=**&key2=**'
+# string and active model arguments don't keep parameters by defalut
+url_for('/examples')  #=> '/examples'
+url_for(@example)  #=> '/examples/:id'
 
 # parameters are not kept if destination controller is different from current controller
 url_for(controller: 'examples2', action: :index)  #=> '/examples2'
 
-# parameters are not kept with keep_params: false
+# parameters are not kept if you set keep_params: false
 url_for(action: :show, keep_params: false)  #=> '/examples/:id'
 ```
 
-Enable specific class of argument:
+Specify class of url_for argument:
 
 ```ruby
-keep_params :key1, :key2, only: :hash    # only hash argument like url_for(action: :show) keeps parameters
-keep_params :key1, :key2, only: :string  # only string argument like url_for('/examples') keeps parameters
-keep_params :key1, :key2, only: :model   # only model argument like url_for(@example) keeps parameters
+keep_params :key1, :key2, args: [:hash]    # only hash argument like url_for(action: :show) keeps parameters
+keep_params :key1, :key2, args: [:string]  # only string argument like url_for('/examples') keeps parameters
+keep_params :key1, :key2, args: [:model]   # only model argument like url_for(@example) keeps parameters
 ```
 
 Keep parameters throught multiple controllers:

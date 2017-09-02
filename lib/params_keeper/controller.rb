@@ -15,11 +15,13 @@ module ParamsKeeper::Controller
     keys = self.class.keep_params_keys
     return super if keys.blank?
 
-    if configs.key?(:only) || configs.key?(:except)
-      types = (Array(configs[:only]).presence || [:hash, :string, :model]) - Array(configs[:except])
-      return super if (options.is_a?(Hash) && !types.include?(:hash)) ||
-                      (options.is_a?(String) && !types.include?(:string)) ||
-                      (options.class.respond_to?(:model_name) && !types.include?(:model))
+    if configs.key?(:args)
+      args = Array(configs[:args])
+      return super if (options.is_a?(Hash) && !args.include?(:hash)) ||
+                      (options.is_a?(String) && !args.include?(:string)) ||
+                      (options.class.respond_to?(:model_name) && !args.include?(:model))
+    elsif !options.is_a?(Hash)
+      return super
     end
 
     if options.is_a?(Hash)
