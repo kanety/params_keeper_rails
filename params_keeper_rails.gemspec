@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["kaneta@sitebridge.co.jp"]
 
   spec.summary       = %q{keep specific parameters through links.}
-  spec.description   = %q{A rails gem for keeping specific parameters through links.}
+  spec.description   = %q{A rails controller extension for keeping specific parameters through links.}
   spec.homepage      = "https://github.com/kanety/params_keeper_rails"
   spec.license       = "MIT"
 
@@ -26,6 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rspec-rails"
-  spec.add_development_dependency "rails-controller-testing"
   spec.add_development_dependency "simplecov"
 end
