@@ -1,6 +1,6 @@
 # ParamsKeeperRails
 
-A rails gem for keeping specific parameters through links.
+A rails controller extension for keeping specific parameters through links.
 
 ## Dependencies
 
@@ -35,10 +35,10 @@ For example:
 ```ruby
 GET "/examples?key1=**&key2=**"
 
-# hash argument
+# hash
 url_for(action: :show)  #=> '/examples/:id?key1=**&key2=**'
 
-# string and active model arguments don't keep parameters by defalut
+# string and active model don't keep parameters by defalut
 url_for('/examples')  #=> '/examples'
 url_for(@example)  #=> '/examples/:id'
 
@@ -49,12 +49,23 @@ url_for(controller: 'examples2', action: :index)  #=> '/examples2'
 url_for(action: :show, keep_params: false)  #=> '/examples/:id'
 ```
 
-Specify class of url_for argument:
+Enable only specific class of url_for:
 
 ```ruby
-keep_params :key1, :key2, args: [:hash]    # only hash argument like url_for(action: :show) keeps parameters
-keep_params :key1, :key2, args: [:string]  # only string argument like url_for('/examples') keeps parameters
-keep_params :key1, :key2, args: [:model]   # only model argument like url_for(@example) keeps parameters
+# enable only hash like url_for(action: :show)
+keep_params :key1, :key2, for: :hash
+
+# enable only string like url_for('/examples')
+keep_params :key1, :key2, for: :string
+
+# enable only model like url_for(@example)
+keep_params :key1, :key2, for: :model
+```
+
+Specify default options of url_for:
+
+```ruby
+keep_params :key1, :key2, url_options: { fixed_param: :something }
 ```
 
 Keep parameters throught multiple controllers:
@@ -73,7 +84,7 @@ end
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/kanety/params_keeper_rails. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/kanety/params_keeper_rails.
 
 ## License
 
