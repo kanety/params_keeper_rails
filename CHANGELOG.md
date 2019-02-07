@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.1
+
+* Support symbolized :to config.
+
 ## 1.1.0
 
 Features:
