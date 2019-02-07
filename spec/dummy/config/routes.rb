@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       3.times do |i|
         get "test_for#{i+1}"
       end
-      2.times do |i|
+      3.times do |i|
         get "test_to#{i+1}"
       end
       get :test_keep_params

@@ -43,8 +43,16 @@ describe SamplesController, type: :request do
       expect(response.body).to include('@url_others2 = /others2')
     end
 
-    it 'keeps params in specified controller with :to config' do
+    it 'keeps params in specific controller with string :to config' do
       get test_to2_samples_path, params: { test: 'VALUE' }
+      expect(response.body).to include('@url_samples1 = /samples')
+      expect(response.body).to include('@url_samples2 = /samples')
+      expect(response.body).to include('@url_others1 = /others1?test=VALUE')
+      expect(response.body).to include('@url_others2 = /others2')
+    end
+
+    it 'keeps params in specific controller with symbol :to config' do
+      get test_to3_samples_path, params: { test: 'VALUE' }
       expect(response.body).to include('@url_samples1 = /samples')
       expect(response.body).to include('@url_samples2 = /samples')
       expect(response.body).to include('@url_others1 = /others1?test=VALUE')

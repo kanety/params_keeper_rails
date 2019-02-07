@@ -39,7 +39,8 @@ class ParamsKeeper::Resolver
   def link_to_target_controller?(options)
     controller = options[:controller].to_s
     if config[:to].present?
-      ([controller] - Array(config[:to])).blank?
+      target = controller.present? ? [controller] : [@controller.controller_name, @controller.controller_path]
+      (Array(config[:to]).map(&:to_s) & target).present?
     else
       controller.blank? || controller.in?([@controller.controller_name, @controller.controller_path])
     end

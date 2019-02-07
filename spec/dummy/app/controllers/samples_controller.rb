@@ -51,6 +51,11 @@ class SamplesController < ActionController::Base
     render_to
   end
 
+  def test_to3
+    self.class.keep_params :test, to: [:others1]
+    render_to
+  end
+
   def test_keep_params
     self.class.keep_params :test
     @url_hash = url_for(action: :index, keep_params: false, only_path: true)

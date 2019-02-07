@@ -11,5 +11,6 @@
 /log/
 /pkg/
 /spec/reports/
+/spec/dummy/log/
 /tmp/
 /vendor/
