@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.2
+
+* Fix url_for helper outside of controller.
+
 ## 1.1.1
 
 * Support symbolized :to config.
