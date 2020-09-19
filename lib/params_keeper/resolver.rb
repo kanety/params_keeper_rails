@@ -6,7 +6,7 @@ class ParamsKeeper::Resolver
   end
 
   def resolve
-    return if !configured? || !enable_options? || !target_options?
+    return unless target?
 
     if @options.is_a?(Hash)
       resolve_from_hash
@@ -15,10 +15,14 @@ class ParamsKeeper::Resolver
     end
   end
 
+  def target?
+    configured? && enable_options? && target_options?
+  end
+
   private
 
   def resolve_from_hash
-    if link_to_target_controller?(@options)
+    if target_controller?(@options)
       base_url_for(self.class.merge_params(@options, @controller.params, config[:keys]))
     else
       base_url_for(@options)
@@ -29,14 +33,14 @@ class ParamsKeeper::Resolver
     url = base_url_for(@options)
     url_opts = recognize_path(url)
 
-    if url_opts && link_to_target_controller?(url_opts)
+    if url_opts && target_controller?(url_opts)
       base_url_for(self.class.merge_params(url_opts, @controller.params, config[:keys]))
     else
       url
     end
   end
 
-  def link_to_target_controller?(options)
+  def target_controller?(options)
     controller = options[:controller].to_s
     if config[:to].present?
       target = controller.present? ? [controller] : [@controller.controller_name, @controller.controller_path]

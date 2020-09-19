@@ -34,6 +34,25 @@ describe SamplesController, type: :request do
     end
   end
 
+  if Rails.gem_version >= Gem::Version.new(5.1)
+    context 'form' do
+      it 'builds hidden_fields for hash' do
+        get test_for1_samples_path, params: { test: 'VALUE' }
+        expect(response.body).to include('<input type="hidden" name="test" value="VALUE" />')
+      end
+
+      it 'builds hidden_fields for string' do
+        get test_for2_samples_path, params: { test: 'VALUE' }
+        expect(response.body).to include('<input type="hidden" name="test" value="VALUE" />')
+      end
+
+      it 'builds hidden_fields for model' do
+        get test_for3_samples_path, params: { test: 'VALUE' }
+        expect(response.body).to include('<input type="hidden" name="test" value="VALUE" />')
+      end
+    end
+  end
+
   context ':to config' do
     it 'keeps params in same controller without :to config' do
       get test_to1_samples_path, params: { test: 'VALUE' }

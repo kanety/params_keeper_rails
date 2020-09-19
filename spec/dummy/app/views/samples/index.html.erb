@@ -1,6 +1,21 @@
 @url_hash = <%= @url_hash %>
 @url_string = <%= @url_string %>
 @url_model = <%= @url_model %>
+
 link_to_hash = <%= link_to '', action: :index %>
 link_to_string = <%= link_to '', "/samples" %>
 link_to_model = <%= link_to '', Sample.new(1) %>
+
+<% if Rails.gem_version >= Gem::Version.new(5.1) %>
+  <%= form_with url: {}, method: :get do %>
+    <%= submit_tag 'submit for hash' %>
+  <% end %>
+
+  <%= form_with url: '', method: :get do %>
+    <%= submit_tag 'submit for string' %>
+  <% end %>
+
+  <%= form_with model: Sample.new(1), method: :get do %>
+    <%= submit_tag 'submit for model' %>
+  <% end %>
+<% end %>
