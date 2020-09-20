@@ -1,21 +1,34 @@
-@url_hash = <%= @url_hash %>
-@url_string = <%= @url_string %>
-@url_model = <%= @url_model %>
+<div>@url_for_hash: <%= @url_for_hash %></div>
+<div>@url_for_string: <%= @url_for_string %></div>
+<div>@url_for_model: <%= @url_for_model %></div>
 
-link_to_hash = <%= link_to '', action: :index %>
-link_to_string = <%= link_to '', "/samples" %>
-link_to_model = <%= link_to '', Sample.new(1) %>
+<hr>
+
+<div>link_to_hash: <%= link = link_to 'samples', action: :index %><%= link.to_str %></div>
+<div>link_to_string: <%= link = link_to 'samples', "/samples" %><%= link.to_str %></div>
+<div>link_to_model: <%= link = link_to 'samples', Sample.new(1) %><%= link.to_str %></div>
+
+<hr>
 
 <% if Rails.gem_version >= Gem::Version.new(5.1) %>
-  <%= form_with url: {}, method: :get do %>
-    <%= submit_tag 'submit for hash' %>
-  <% end %>
-
-  <%= form_with url: '', method: :get do %>
-    <%= submit_tag 'submit for string' %>
-  <% end %>
-
-  <%= form_with model: Sample.new(1), method: :get do %>
-    <%= submit_tag 'submit for model' %>
-  <% end %>
+  <div>
+    <%= form = form_with url: {}, method: :get do %>
+      <%= submit_tag 'submit for hash' %>
+    <% end %>
+    <%= form.to_str %>
+  </div>
+  <hr>
+  <div>
+    <%= form = form_with url: '/samples', method: :get do %>
+      <%= submit_tag 'submit for string' %>
+    <% end %>
+    <%= form.to_str %>
+  </div>
+  <hr>
+  <div>
+    <%= form = form_with model: Sample.new(1), method: :get do %>
+      <%= submit_tag 'submit for model' %>
+    <% end %>
+    <%= form.to_str %>
+  </div>
 <% end %>

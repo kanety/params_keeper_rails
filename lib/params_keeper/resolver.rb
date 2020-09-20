@@ -1,89 +1,85 @@
 class ParamsKeeper::Resolver
-  def initialize(klass, controller, options)
-    @klass = klass
+  def initialize(controller, url_options)
     @controller = controller
-    @options = options
+    @url_options = url_options
+    @cache = {}
   end
 
-  def resolve
-    return unless target?
+  def call
+    return {} if configs.blank? || skip_url_options?
 
-    if @options.is_a?(Hash)
-      resolve_from_hash
-    else
-      resolve_from_routing
+    configs.each_with_object({}) do |config, params|
+      if target_config?(config)
+        params.merge!(extract_params(config))
+      end
     end
   end
 
-  def target?
-    configured? && enable_options? && target_options?
+  def url_options_hash
+    if @url_options.is_a?(Hash)
+      @url_options
+    else
+      recognize_path(base_url_for(@url_options))
+    end
   end
 
   private
 
-  def resolve_from_hash
-    if target_controller?(@options)
-      base_url_for(self.class.merge_params(@options, @controller.params, config[:keys]))
+  def configs
+    @controller.class.keep_params_configs
+  end
+
+  def skip_url_options?
+    if @url_options.is_a?(Hash)
+      @url_options.delete(:keep_params) == false
     else
-      base_url_for(@options)
+      false
     end
   end
 
-  def resolve_from_routing
-    url = base_url_for(@options)
-    url_opts = recognize_path(url)
+  def target_config?(config)
+    target_url_options?(config) && target_controller?(config)
+  end
 
-    if url_opts && target_controller?(url_opts)
-      base_url_for(self.class.merge_params(url_opts, @controller.params, config[:keys]))
+  def target_url_options?(config)
+    (config.for.include?(:hash) && @url_options.is_a?(Hash)) ||
+      (config.for.include?(:string) && @url_options.is_a?(String)) ||
+      (config.for.include?(:model) && @url_options.class.respond_to?(:model_name))
+  end
+
+  def target_controller?(config)
+    dests = destination_controllers(url_options_hash)
+    if config.to.present?
+      (dests & config.to.map(&:to_s)).present?
     else
-      url
+      (dests & current_controllers).present?
     end
   end
 
-  def target_controller?(options)
-    controller = options[:controller].to_s
-    if config[:to].present?
-      target = controller.present? ? [controller] : [@controller.controller_name, @controller.controller_path]
-      (Array(config[:to]).map(&:to_s) & target).present?
+  def current_controllers
+    [@controller.controller_name, @controller.controller_path]
+  end
+
+  def destination_controllers(url_options_hash)
+    if url_options_hash[:controller].present?
+      [url_options_hash[:controller].to_s]
     else
-      controller.blank? || controller.in?([@controller.controller_name, @controller.controller_path])
+      current_controllers
     end
-  end
-
-  def config
-    @controller.class.keep_params_config
-  end
-
-  def configured?
-    config && config[:keys].present?
-  end
-
-  def enable_options?
-    !@options.is_a?(Hash) || @options.delete(:keep_params) != false
-  end
-
-  def target_options?
-    fors = Array(config[:for] || :hash)
-    (fors.include?(:hash) && @options.is_a?(Hash)) ||
-      (fors.include?(:string) && @options.is_a?(String)) ||
-      (fors.include?(:model) && @options.class.respond_to?(:model_name))
   end
 
   def recognize_path(url)
-    Rails.application.routes.recognize_path(url)
+    @cache[url] ||= Rails.application.routes.recognize_path(url)
   rescue ActionController::RoutingError
-    nil
+    {}
   end
 
-  def base_url_for(options)
-    options = options.merge(config[:url_options]) if options.is_a?(Hash) && config[:url_options]
-    @klass.method(:url_for).super_method.call(options)
+  def extract_params(config)
+    params = @controller.request.params.deep_symbolize_keys
+    params.slice(*config.keys).merge(config.url_options)
   end
 
-  class << self
-    def merge_params(options, params, keys)
-      keeps = params.to_unsafe_h.deep_symbolize_keys.slice(*keys.to_a)
-      options.reverse_merge(keeps)
-    end
+  def base_url_for(url_options)
+    @controller.method(:url_for).super_method.call(url_options)
   end
 end
