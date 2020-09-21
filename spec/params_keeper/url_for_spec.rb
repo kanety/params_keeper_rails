@@ -6,7 +6,7 @@ describe ParamsKeeper::UrlFor do
   it 'builds url' do
     controller = create_controller(SamplesController, "/samples?key=value", [:key])
     expect(url_for(controller, { controller: :samples, only_path: true })).to eq('/samples?key=value')
-    expect(url_for(controller, { controller: :others1, only_path: true })).to eq('/others1')
-    expect(url_for(controller, { controller: :others2, only_path: true })).to eq('/others2')
+    expect(url_for(controller, { controller: :others1, only_path: true })).to eq(nil)
+    expect(url_for(controller, { controller: :others2, only_path: true })).to eq(nil)
   end
 end
