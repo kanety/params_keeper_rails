@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.0
+
+* Support multiple configs.
+* Support hidden fields for `form_with` with GET method. (Rails => 5.1)
+
 ## 1.1.2
 
 * Fix url_for helper outside of controller.

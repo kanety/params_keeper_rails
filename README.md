@@ -29,57 +29,85 @@ class ExamplesController < ApplicationController
   keep_params :key1, :key2
 ```
 
-Parameters are kept if destination controller is same as current controller.
+Parameters are kept via `url_for` if destination controller is same as current controller.
 For example:
 
 ```ruby
 GET "/examples?key1=**&key2=**"
 
-# hash
-url_for(action: :show)  #=> '/examples/:id?key1=**&key2=**'
+# hash arg
+url_for(action: :index)  #=> '/examples?key1=**&key2=**'
 
-# string and active model don't keep parameters by defalut
+# parameters are not kept if string or model arg is specified
 url_for('/examples')  #=> '/examples'
 url_for(@example)  #=> '/examples/:id'
 
 # parameters are not kept if destination controller is different from current controller
 url_for(controller: 'examples2', action: :index)  #=> '/examples2'
 
-# parameters are not kept if you set keep_params: false
+# parameters are not kept if you put "keep_params: false" into args
 url_for(action: :show, keep_params: false)  #=> '/examples/:id'
 ```
 
-Enable only specific class of url_for:
+Parameters are kept for form with GET method via hidden fields.
+This feature is supported by `form_with` for rails >= 5.1.
 
 ```ruby
-# enable only hash like url_for(action: :show)
+<%= form_with url: { action: :index}, method: :get do %>
+  <%= submit_tag 'submit' %>
+<% end %>
+#=> ...<input type="hidden" name="key1" value="**" />
+#      <input type="hidden" name="key2" value="**" /></form>
+```
+
+## Options
+
+### Argument type
+
+Enable only specific argument type of url_for:
+
+```ruby
+# hash arg (same as default behaviour)
 keep_params :key1, :key2, for: :hash
+url_for(action: :index)  #=> '/examples?key1=**&key2=**'
 
-# enable only string like url_for('/examples')
+# string arg
 keep_params :key1, :key2, for: :string
+url_for('/examples')  #=> '/examples?key1=**&key2=**'
 
-# enable only model like url_for(@example)
+# model arg
 keep_params :key1, :key2, for: :model
+url_for(@example)  #=> '/examples/:id?key1=**&key2=**'
 ```
 
-Specify default options of url_for:
+`:for` allows to set multiple argument type as follows:
 
 ```ruby
-keep_params :key1, :key2, url_options: { fixed_param: :something }
+keep_params :key1, :key2, for: [:hash, :model]
 ```
+
+### Multiple controllers
 
 Keep parameters throught multiple controllers:
 
 ```ruby
 class ExamplesController < ApplicationController
   include ParamsKeeper::Controller
-  keep_params :key1, :key2, to: %w(examples nested_examples)
+  keep_params :key1, :key2, to: %w(examples examples2)
 end
 
-class NestedExamplesController < ApplicationController
+class Examples2Controller < ApplicationController
   include ParamsKeeper::Controller
-  keep_params :key1, :key2, to: %w(examples nested_examples)
+  keep_params :key1, :key2, to: %w(examples examples2)
 end
+```
+
+### Default parameters
+
+Specify default parameters:
+
+```ruby
+keep_params :key1, :key2, url_options: { fixed_param: :something }
 ```
 
 ## Contributing
