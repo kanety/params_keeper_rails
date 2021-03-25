@@ -9,7 +9,9 @@ describe SamplesController, type: :request do
       keep_params(:key, for: :hash)
       get samples_path, params: { key: 'value' }
       expect(response.body).to include('@url_for_hash: http://www.example.com/samples?key=value')
+      expect(response.body).to include('@url_for_hash_without_key: http://www.example.com/samples')
       expect(response.body).to include('link_to_hash: <a href="/samples?key=value">')
+      expect(response.body).to include('link_to_hash_without_key: <a href="/samples">')
       expect(response.body).to include('@url_for_string: http://www.example.com/samples')
       expect(response.body).to include('link_to_string: <a href="/samples">')
       expect(response.body).to include('@url_for_model: http://www.example.com/samples')
@@ -20,7 +22,9 @@ describe SamplesController, type: :request do
       keep_params(:key, for: :string)
       get samples_path, params: { key: 'value' }
       expect(response.body).to include('@url_for_hash: http://www.example.com/samples')
+      expect(response.body).to include('@url_for_hash_without_key: http://www.example.com/samples')
       expect(response.body).to include('link_to_hash: <a href="/samples">')
+      expect(response.body).to include('link_to_hash_without_key: <a href="/samples">')
       expect(response.body).to include('@url_for_string: http://www.example.com/samples?key=value')
       expect(response.body).to include('link_to_string: <a href="/samples?key=value">')
       expect(response.body).to include('@url_for_model: http://www.example.com/samples')
@@ -31,7 +35,9 @@ describe SamplesController, type: :request do
       keep_params(:key, for: :model)
       get samples_path, params: { key: 'value' }
       expect(response.body).to include('@url_for_hash: http://www.example.com/samples')
+      expect(response.body).to include('@url_for_hash_without_key: http://www.example.com/samples')
       expect(response.body).to include('link_to_hash: <a href="/samples">')
+      expect(response.body).to include('link_to_hash_without_key: <a href="/samples">')
       expect(response.body).to include('@url_for_string: http://www.example.com/samples')
       expect(response.body).to include('link_to_string: <a href="/samples">')
       expect(response.body).to include('@url_for_model: http://www.example.com/samples?key=value')
@@ -44,19 +50,20 @@ describe SamplesController, type: :request do
       it 'for hash' do
         keep_params(:key, for: :hash)
         get samples_path, params: { key: 'value' }
-        expect(response.body).to include('<input type="hidden" name="key" value="value" />')
+        expect(response.body).to include(%Q|"submit for hash" />\n<input type="hidden" name="key" value="value" />|)
+        expect(response.body).not_to include(%Q|"submit for hash without key" />\n<input type="hidden" name="key" value="value" />|)
       end
 
       it 'for string' do
         keep_params(:key, for: :string)
         get samples_path, params: { key: 'value' }
-        expect(response.body).to include('<input type="hidden" name="key" value="value" />')
+        expect(response.body).to include(%Q|"submit for string" />\n<input type="hidden" name="key" value="value" />|)
       end
 
       it 'for model' do
         keep_params(:key, for: :model)
         get samples_path, params: { key: 'value' }
-        expect(response.body).to include('<input type="hidden" name="key" value="value" />')
+        expect(response.body).to include(%Q|"submit for model" />\n<input type="hidden" name="key" value="value" />|)
       end
     end
   end

@@ -9,10 +9,14 @@ module ParamsKeeper
     def call
       return {} if configs.blank? || skip_url_options?
 
-      configs.each_with_object({}) do |config, params|
-        if target_config?(config)
-          params.merge!(extract_params(config))
-        end
+      params = configs.each_with_object({}) do |config, _params|
+        _params.merge!(extract_params(config)) if target_config?(config)
+      end
+
+      if params.present?
+        url_options_hash.reverse_merge(params)
+      else
+        {}
       end
     end
 

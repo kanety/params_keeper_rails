@@ -6,14 +6,14 @@ describe ParamsKeeper::Resolver do
   context 'keeps params for url' do
     it 'unspecified' do
       controller = create_controller(SamplesController, "/samples?key=value", [:key])
-      expect(resolver(controller, {})).to eq({ key: 'value' })
+      expect(resolver(controller, {})).to include({ key: 'value' })
       expect(resolver(controller, "/samples")).to eq({})
       expect(resolver(controller, Sample.new(1))).to eq({})
     end
 
     it 'with hash' do
       controller = create_controller(SamplesController, "/samples?key=value", [:key, for: :hash])
-      expect(resolver(controller, {})).to eq({ key: 'value' })
+      expect(resolver(controller, {})).to include({ key: 'value' })
       expect(resolver(controller, "/samples")).to eq({})
       expect(resolver(controller, Sample.new(1))).to eq({})
     end
@@ -21,7 +21,7 @@ describe ParamsKeeper::Resolver do
     it 'with string' do
       controller = create_controller(SamplesController, "/samples?key=value", [:key, for: :string])
       expect(resolver(controller, {})).to eq({})
-      expect(resolver(controller, "/samples")).to eq({ key: 'value' })
+      expect(resolver(controller, "/samples")).to include({ key: 'value' })
       expect(resolver(controller, Sample.new(1))).to eq({})
     end
 
@@ -29,15 +29,15 @@ describe ParamsKeeper::Resolver do
       controller = create_controller(SamplesController, "/samples?key=value", [:key, for: :model])
       expect(resolver(controller, {})).to eq({})
       expect(resolver(controller, "/samples")).to eq({})
-      expect(resolver(controller, Sample.new(1))).to eq({ key: 'value' })
+      expect(resolver(controller, Sample.new(1))).to include({ key: 'value' })
     end
   end
 
   context 'keeps params with destination controller' do
     it 'unspecified' do
       controller = create_controller(SamplesController, "/samples?key=value", [:key])
-      expect(resolver(controller, {})).to eq({ key: 'value' })
-      expect(resolver(controller, { controller: :samples })).to eq({ key: 'value' })
+      expect(resolver(controller, {})).to include({ key: 'value' })
+      expect(resolver(controller, { controller: :samples })).to include({ key: 'value' })
       expect(resolver(controller, { controller: :others1 })).to eq({})
       expect(resolver(controller, { controller: :others2 })).to eq({})
     end
@@ -46,7 +46,7 @@ describe ParamsKeeper::Resolver do
       controller = create_controller(SamplesController, "/samples?key=value", [:key, to: :others1])
       expect(resolver(controller, {})).to eq({})
       expect(resolver(controller, { controller: :samples })).to eq({})
-      expect(resolver(controller, { controller: :others1 })).to eq({ key: 'value' })
+      expect(resolver(controller, { controller: :others1 })).to include({ key: 'value' })
       expect(resolver(controller, { controller: :others2 })).to eq({})
     end
 
@@ -54,7 +54,7 @@ describe ParamsKeeper::Resolver do
       controller = create_controller(SamplesController, "/samples?key=value", [:key, to: 'others1'])
       expect(resolver(controller, {})).to eq({})
       expect(resolver(controller, { controller: :samples })).to eq({})
-      expect(resolver(controller, { controller: :others1 })).to eq({ key: 'value' })
+      expect(resolver(controller, { controller: :others1 })).to include({ key: 'value' })
       expect(resolver(controller, { controller: :others2 })).to eq({})
     end
   end

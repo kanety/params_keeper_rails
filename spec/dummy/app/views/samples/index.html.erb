@@ -1,10 +1,12 @@
 <div>@url_for_hash: <%= @url_for_hash %></div>
+<div>@url_for_hash_without_key: <%= @url_for_hash_without_key %></div>
 <div>@url_for_string: <%= @url_for_string %></div>
 <div>@url_for_model: <%= @url_for_model %></div>
 
 <hr>
 
 <div>link_to_hash: <%= link = link_to 'samples', action: :index %><%= link.to_str %></div>
+<div>link_to_hash_without_key: <%= link = link_to 'samples', { action: :index, key: nil } %><%= link.to_str %></div>
 <div>link_to_string: <%= link = link_to 'samples', "/samples" %><%= link.to_str %></div>
 <div>link_to_model: <%= link = link_to 'samples', Sample.new(1) %><%= link.to_str %></div>
 
@@ -12,8 +14,15 @@
 
 <% if Rails.gem_version >= Gem::Version.new(5.1) %>
   <div>
-    <%= form = form_with url: {}, method: :get do %>
+    <%= form = form_with url: { action: :index }, method: :get do %>
       <%= submit_tag 'submit for hash' %>
+    <% end %>
+    <%= form.to_str %>
+  </div>
+  <hr>
+  <div>
+    <%= form = form_with url: { action: :index, key: nil }, method: :get do %>
+      <%= submit_tag 'submit for hash without key' %>
     <% end %>
     <%= form.to_str %>
   </div>

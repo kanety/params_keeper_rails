@@ -11,6 +11,8 @@ module ParamsKeeper
       params = ParamsKeeper::Resolver.new(@controller, @url_options).call
       return if params.blank?
 
+      params.reject! { |k, v| k.to_s.in?(%w(controller action)) || v.blank? }
+
       CGI.parse(params.to_query).flat_map do |key, values|
         values.map { |value| @controller.view_context.hidden_field_tag(key, value, id: nil) }
       end.join.html_safe

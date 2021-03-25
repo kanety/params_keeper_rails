@@ -9,11 +9,10 @@ module ParamsKeeper
     def call
       return if @controller.class.keep_params_configs.blank?
 
-      resolver = ParamsKeeper::Resolver.new(@controller, @url_options)
-      params = resolver.call
+      params = ParamsKeeper::Resolver.new(@controller, @url_options).call
       return if params.blank?
 
-      base_url_for(resolver.url_options_hash.reverse_merge(params))
+      base_url_for(params)
     end
 
     private
