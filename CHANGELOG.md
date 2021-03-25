@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.1
+
+* Fix order of options to be resolved for hidden fields.
+
 ## 1.2.0
 
 * Support multiple configs.
