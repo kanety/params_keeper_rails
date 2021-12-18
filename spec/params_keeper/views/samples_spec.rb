@@ -44,19 +44,19 @@ describe SamplesController, type: :request do
       it 'for hash' do
         keep_params(:key, for: :hash)
         get samples_path, params: { key: 'value' }
-        expect(response.body).to include('<input type="hidden" name="key" value="value" />')
+        expect(response.body).to include('<input type="hidden" name="key" value="value"')
       end
 
       it 'for string' do
         keep_params(:key, for: :string)
         get samples_path, params: { key: 'value' }
-        expect(response.body).to include('<input type="hidden" name="key" value="value" />')
+        expect(response.body).to include('<input type="hidden" name="key" value="value"')
       end
 
       it 'for model' do
         keep_params(:key, for: :model)
         get samples_path, params: { key: 'value' }
-        expect(response.body).to include('<input type="hidden" name="key" value="value" />')
+        expect(response.body).to include('<input type="hidden" name="key" value="value"')
       end
     end
   end
