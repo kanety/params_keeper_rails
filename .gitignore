@@ -1,8 +1,13 @@
 /.bundle/
-/.project
 /Gemfile.lock
 /gemfiles/*gemfile.lock
 /coverage/
 /log/
 /pkg/
+/tmp/
 /spec/dummy/log/
+/spec/dummy/config/database.yml
+/spec/dummy/db/schema*.rb
+/spec/dummy/db/*.sqlite3
+/spec/dummy/log/*.log
+/spec/dummy/tmp/*
