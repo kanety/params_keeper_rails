@@ -14,7 +14,7 @@ module ParamsKeeper
       url_options = options[:url] || options[:model]
       hidden_fields = ParamsKeeper::HiddenFields.new(controller, url_options).call
       if hidden_fields.present?
-        html.sub('</form>') { "#{hidden_fields}</form>" }.html_safe
+        html.sub(/^(<form[^>]*>)/) { "#{$1}#{hidden_fields}" }.html_safe
       else
         html
       end
