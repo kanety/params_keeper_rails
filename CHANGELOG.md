@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.2
+
+* Put hidden fields after beginning tag of form.
+
 ## 1.2.1
 
 * Fix order of options to be resolved for hidden fields.
