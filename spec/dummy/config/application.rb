@@ -10,6 +10,8 @@ require "params_keeper_rails"
 
 module Dummy
   class Application < Rails::Application
+    config.load_defaults Rails::VERSION::STRING.to_f if config.respond_to?(:load_defaults)
+
     config.secret_key_base = 'key'
   end
 end
