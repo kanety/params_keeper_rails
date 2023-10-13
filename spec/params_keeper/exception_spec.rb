@@ -7,7 +7,8 @@ describe ParamsKeeper::Controller do
 
     it 'does not affect redirect_to' do
       controller = create_controller(ApplicationController, "/?key=value")
-      expect(controller.redirect_to(controller: :application)).to include('"http://localhost/"')
+      controller.redirect_to(controller: :application)
+      expect(controller.response.location).to include('http://localhost/')
     end
   end
 
@@ -19,7 +20,8 @@ describe ParamsKeeper::Controller do
 
     it 'does not affect redirect_to' do
       controller = create_controller(ApplicationController, "/?key=value")
-      expect(controller.redirect_to(controller: :samples)).to include('"http://localhost/samples"')
+      controller.redirect_to(controller: :samples)
+      expect(controller.response.location).to include('http://localhost/samples')
     end
   end
 end
