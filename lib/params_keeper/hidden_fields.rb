@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ParamsKeeper
   class HiddenFields
     def initialize(controller, url_options)

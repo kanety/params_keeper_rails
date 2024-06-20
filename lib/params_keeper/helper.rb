@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ParamsKeeper
   module Helper
     def url_for(url_options = nil)

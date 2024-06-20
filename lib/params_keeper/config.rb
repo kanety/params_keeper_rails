@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ParamsKeeper
   class Config
     attr_accessor :keys, :to, :for, :url_options

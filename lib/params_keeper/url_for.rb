@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ParamsKeeper
   class UrlFor
     def initialize(caller, controller, url_options)
