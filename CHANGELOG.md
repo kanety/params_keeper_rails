@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.3
+
+* Add `frozen_string_literal: true`.
+
 ## 1.2.2
 
 * Put hidden fields after beginning tag of form.
