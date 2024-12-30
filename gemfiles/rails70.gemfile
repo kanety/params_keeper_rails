@@ -2,4 +2,11 @@ source 'https://rubygems.org'
 
 gem "rails", "~> 7.0.1"
 
+if RUBY_VERSION >= "3.4"
+  gem "bigdecimal"
+  gem "base64"
+  gem "drb"
+  gem "mutex_m"
+end
+
 gemspec path: "../"
