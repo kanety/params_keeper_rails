@@ -13,8 +13,8 @@ module ParamsKeeper
       params = ParamsKeeper::Resolver.new(@controller, @url_options).call
       return if params.blank?
 
-      CGI.parse(params.to_query).flat_map do |key, values|
-        values.map { |value| @controller.view_context.hidden_field_tag(key, value, id: nil) }
+      URI.decode_www_form(params.to_query).map do |key, value|
+        @controller.view_context.hidden_field_tag(key, value, id: nil)
       end.join.html_safe
     end
   end
