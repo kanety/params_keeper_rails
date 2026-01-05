@@ -4,8 +4,8 @@ A rails controller extension for keeping specific parameters through links.
 
 ## Dependencies
 
-* ruby 2.3+
-* rails 5.0+
+* ruby 3.0+
+* rails 7.0+
 
 ## Installation
 
