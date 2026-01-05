@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.3.0
+
+* Drop support for ruby <= 2.7, rails <= 6.1.
+* Use `URI.decode_www_form` instead of deprecated `CGI.parse`.
+
 ## 1.2.3
 
 * Add `frozen_string_literal: true`.
